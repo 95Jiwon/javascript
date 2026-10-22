@@ -77,10 +77,10 @@ function getUserOfController(username) {
         //response안에 다양한 정보가 있다.
     }
 
-    if(!(username ?? "").trim()) {
+    if(!(username ?? "").trim()) { // null이거나 undefined이면 trim을 할 수 없다.
         return { // MAP의 특성 상 키값이 동일하면 덮어 써버린다. + 리턴 안의 값만 변화된다.
-            ...response,
-            status: 400,
+            ...response, //스프레드 문법으로 리스폰을 그대로 복사 해온다.
+            status: 400, // 값이 안들어 왔으면 상태값을 바꾸고 데이터를 메세지로 덮어씌워 메세지만 출력한다.
             data: {
                 message: "사용자 정보를 확인하세요.",
             }
@@ -92,9 +92,9 @@ function getUserOfController(username) {
 
 function getUser(username) {
     console.log("서버에서 사용자 정보 요청");
-    return new Promise((resolve, reject) =>{
+    return new Promise((resolve, reject) =>{ // =>는 함수 지정 대신으로 사용된다. =>를 쓰지 않으면 function  (resolve, reject)로 사용이 가능하다.
         const response = getUserOfController(username);
-        if (response.stats !== 200) {
+        if (response.status !== 200) {
             reject(response.data);
             return;
         }
@@ -103,7 +103,8 @@ function getUser(username) {
 }
 
 console.log("전체 렌더링 시작");
-getUser("r").then(responseData => {
+
+getUser("user").then(responseData => {
     console.log(responseData);
     }).catch(error => {
         console.log(error);
